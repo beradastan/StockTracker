@@ -4,11 +4,19 @@ from zara_checker import create_driver, check_stock_zara
 from stradivarius_checker import check_stock_stradivarius
 from bershka_checker import check_stock_bershka
 from notifier import send_mail
-from config import ZARA_PRODUCTS, STRADIVARIUS_PRODUCTS, BERSHKA_PRODUCTS
+from products_loader import load_products
+
 
 
 if __name__ == "__main__":
     print("🕒 Stok kontrolü başladı (GitHub Actions run)")
+
+    products = load_products()
+
+    ZARA_PRODUCTS = products.get("zara", [])
+    STRADIVARIUS_PRODUCTS = products.get("stradivarius", [])
+    BERSHKA_PRODUCTS = products.get("bershka", [])
+
 
     # 🔹 ZARA
     for product in ZARA_PRODUCTS:
