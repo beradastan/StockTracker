@@ -38,12 +38,7 @@ BERSHKA_PRODUCTS = [
     # buraya başka ürün ekleyebilirsin
 ]
 
-PULLANDBEAR_PRODUCTS = [
-    {
-        "url": "https://www.pullandbear.com/tr/basic-bisiklet-yaka-sweatshirt-l07560514?pelement=692988872&cS=805",
-        "sizes": ["XS"]
-    }
-]
+
 
 PAGE_LOAD_TIMEOUT = 60
 HUMAN_WAIT = 3
