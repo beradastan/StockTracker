@@ -1,3 +1,4 @@
+import json
 import time
 
 from zara_checker import create_driver, check_stock_zara
@@ -5,7 +6,7 @@ from stradivarius_checker import check_stock_stradivarius
 from bershka_checker import check_stock_bershka
 from notifier import send_mail
 from products_loader import load_products
-from state_manager import can_send_mail , mark_mail_sent , reset_mail_counter
+from state_manager import mark_in_stock , is_new_stock , mark_out_of_stock , load_state
 
 
 
@@ -13,7 +14,7 @@ if __name__ == "__main__":
     print("Stock check started (GitHub Actions run)")
 
     products = load_products()
-
+    state = load_state()
     ZARA_PRODUCTS = products.get("zara", [])
     STRADIVARIUS_PRODUCTS = products.get("stradivarius", [])
     BERSHKA_PRODUCTS = products.get("bershka", [])
@@ -29,13 +30,14 @@ if __name__ == "__main__":
 
         try:
             if check_stock_zara(driver, url, sizes):
-                if can_send_mail(url):
-                    print(f"🚨 ZARA in stock (Varyant: {sizes})")
-                    send_mail(url)
-                    mark_mail_sent(url)
+                for size in sizes:
+                    if is_new_stock(state, url, size):
+                        print(f"🚨 ZARA in stock (Varyant: {sizes})")
+                        send_mail(url)
+                        mark_in_stock(state, url, size)
             else:
                 print(f"❌ ZARA size not in stock: {sizes}")
-                reset_mail_counter(url)
+                mark_out_of_stock(state, url, size)
         finally:
             driver.quit()
             time.sleep(5)
@@ -50,13 +52,14 @@ if __name__ == "__main__":
 
         try:
             if check_stock_stradivarius(driver, url, sizes):
-                if can_send_mail(url):
-                    print(f"🚨 STRADIVARIUS in stock (Size: {', '.join(sizes)})")
-                    send_mail(url)
-                    mark_mail_sent(url)
+                for size in sizes:
+                    if is_new_stock(state, url, size):
+                        print(f"🚨 STRADIVARIUS in stock (Size: {', '.join(sizes)})")
+                        send_mail(url)
+                        mark_in_stock(state, url, size)
             else:
                 print(f"❌ STRADIVARIUS requested sizes are not in stock: {sizes}")
-                reset_mail_counter(url)
+                mark_out_of_stock(state, url, size)
         finally:
             driver.quit()
             time.sleep(5)
@@ -71,15 +74,17 @@ if __name__ == "__main__":
 
         try:
             if check_stock_bershka(driver, url, sizes):
-                if can_send_mail(url):
-                    print(f"🚨 BERSHKA in stock (Size: {', '.join(sizes)})")
-                    send_mail(url)
-                    mark_mail_sent(url)
+                for size in sizes:
+                    if is_new_stock(state, url, size):
+                        print(f"🚨 BERSHKA in stock (Size: {', '.join(sizes)})")
+                        send_mail(url)
+                        mark_in_stock(state, url, size)
             else:
                 print(f"❌ BERSHKA requested sizes are not in stock: {sizes}")
-                reset_mail_counter(url)
+                mark_out_of_stock(state, url, size)
         finally:
             driver.quit()
             time.sleep(5)
 
+    print("UPDATED_STATE=" + json.dumps(state))
     print("\n✅ Stock check completed, workflow finished successfully.")
