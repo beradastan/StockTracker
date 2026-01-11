@@ -9,7 +9,7 @@ from products_loader import load_products
 
 
 if __name__ == "__main__":
-    print("🕒 Stok kontrolü başladı (GitHub Actions run)")
+    print("Stock check started (GitHub Actions run)")
 
     products = load_products()
 
@@ -23,15 +23,15 @@ if __name__ == "__main__":
         url = product["url"]
         sizes = product["sizes"]
 
-        print(f"\n🔍 ZARA kontrol ediliyor:\n{url}")
+        print(f"\n Checking ZARA :\n{url}")
         driver = create_driver()
 
         try:
             if check_stock_zara(driver, url, sizes):
-                print(f"🚨 ZARA STOKTA! (Varyant: {sizes})")
+                print(f"🚨 ZARA in stock (Varyant: {sizes})")
                 send_mail(url)
             else:
-                print(f"❌ ZARA varyant stokta değil: {sizes}")
+                print(f"❌ ZARA size not in stock: {sizes}")
         finally:
             driver.quit()
             time.sleep(5)
@@ -41,15 +41,15 @@ if __name__ == "__main__":
         url = product["url"]
         sizes = product["sizes"]
 
-        print(f"\n🔍 STRADIVARIUS kontrol ediliyor:\n{url}")
+        print(f"\nChecking STRADIVARIUS:\n{url}")
         driver = create_driver()
 
         try:
             if check_stock_stradivarius(driver, url, sizes):
-                print(f"🚨 STRADIVARIUS STOKTA! (Beden: {', '.join(sizes)})")
+                print(f"🚨 STRADIVARIUS in stock (Size: {', '.join(sizes)})")
                 send_mail(url)
             else:
-                print(f"❌ İstenen bedenler stokta değil: {sizes}")
+                print(f"❌ STRADIVARIUS requested sizes are not in stock: {sizes}")
         finally:
             driver.quit()
             time.sleep(5)
@@ -59,17 +59,17 @@ if __name__ == "__main__":
         url = product["url"]
         sizes = product["sizes"]
 
-        print(f"\n🔍 BERSHKA kontrol ediliyor:\n{url}")
+        print(f"\nChecking BERSHKA:\n{url}")
         driver = create_driver()
 
         try:
             if check_stock_bershka(driver, url, sizes):
-                print(f"🚨 BERSHKA STOKTA! (Beden: {', '.join(sizes)})")
+                print(f"🚨 BERSHKA in stock (Size: {', '.join(sizes)})")
                 send_mail(url)
             else:
-                print(f"❌ BERSHKA istenen bedenler stokta değil: {sizes}")
+                print(f"❌ BERSHKA requested sizes are not in stock: {sizes}")
         finally:
             driver.quit()
             time.sleep(5)
 
-    print("\n✅ Stok kontrolü tamamlandı, workflow başarıyla bitti.")
+    print("\n✅ Stock check completed, workflow finished successfully.")

@@ -10,7 +10,7 @@ def check_stock_bershka(driver, url, target_sizes):
     wait = WebDriverWait(driver, PAGE_LOAD_TIMEOUT)
     driver.get(url)
 
-    # 🍪 Cookie kabul
+
     try:
         wait.until(
             EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler"))
@@ -20,7 +20,6 @@ def check_stock_bershka(driver, url, target_sizes):
 
     time.sleep(HUMAN_WAIT)
 
-    # 📏 Beden butonlarını bekle
     try:
         wait.until(
             EC.presence_of_element_located(
@@ -28,7 +27,7 @@ def check_stock_bershka(driver, url, target_sizes):
             )
         )
     except TimeoutException:
-        print("Bershka bedenler yüklenmedi → STOK YOK")
+        print("Bershka sizes did not load → OUT OF STOCK")
         return False
 
     size_buttons = driver.find_elements(
@@ -36,7 +35,6 @@ def check_stock_bershka(driver, url, target_sizes):
     )
 
     for btn in size_buttons:
-        # beden adı
         try:
             size_text = btn.find_element(
                 By.CSS_SELECTOR, "span.text__label"
@@ -47,26 +45,24 @@ def check_stock_bershka(driver, url, target_sizes):
         if size_text not in [s.upper() for s in target_sizes]:
             continue
 
-        print(f"🔍 {size_text} bedeni bulundu")
+        print(f"{size_text} found")
 
         class_attr = btn.get_attribute("class") or ""
         aria_disabled = btn.get_attribute("aria-disabled")
         aria_desc = btn.get_attribute("aria-description")
         disabled_attr = btn.get_attribute("disabled")
 
-        # ❌ STOK YOK (KESİN)
         if (
             aria_disabled == "true"
             or disabled_attr is not None
             or "is-disabled" in class_attr
             or (aria_desc and "tükendi" in aria_desc.lower())
         ):
-            print(f"❌ {size_text} bedeni stokta değil")
+            print(f"❌ {size_text} is out of stock")
             continue
 
-        # ✅ STOKTA
-        print(f"✅ {size_text} BEDENİ STOKTA")
+        print(f"✅ {size_text} is in stock")
         return True
 
-    print("İstenen bedenlerin hiçbiri stokta değil")
+    print("None of the requested sizes are in stock")
     return False

@@ -17,7 +17,6 @@ def check_stock_zara(driver, url, target_variants):
     wait = WebDriverWait(driver, PAGE_LOAD_TIMEOUT)
     driver.get(url)
 
-    # 🍪 Cookie kabul
     try:
         wait.until(
             EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler"))
@@ -27,7 +26,6 @@ def check_stock_zara(driver, url, target_variants):
 
     time.sleep(HUMAN_WAIT)
 
-    # 🛒 Ekle butonu
     try:
         add_btn = wait.until(
             EC.element_to_be_clickable(
@@ -35,12 +33,11 @@ def check_stock_zara(driver, url, target_variants):
             )
         )
         driver.execute_script("arguments[0].click();", add_btn)
-        print("Ekle butonuna tıklandı")
+        print("Clicked the add-to-cart button")
     except TimeoutException:
-        print("Ekle butonu yok → STOK YOK")
+        print("Add-to-cart button not found → OUT OF STOCK")
         return False
 
-    # 📦 Varyant / seçenek listesi
     try:
         wait.until(
             EC.presence_of_element_located(
@@ -48,8 +45,7 @@ def check_stock_zara(driver, url, target_variants):
             )
         )
     except TimeoutException:
-        # Varyant yoksa (tek ürün) → stokta
-        print("Varyant yok ama ekle açıldı → STOKTA")
+        print("No variants, but add-to-cart opened → IN STOCK")
         return True
 
     option_labels = driver.find_elements(
@@ -67,12 +63,12 @@ def check_stock_zara(driver, url, target_variants):
 
                 data_action = button.get_attribute("data-qa-action") or ""
                 if "in-stock" in data_action or "low-on-stock" in data_action:
-                    print(f"✅ ZARA VARYANT STOKTA → {text}")
+                    print(f"✅ ZARA size in stock → {text}")
                     return True
                 else:
-                    print(f"❌ ZARA VARYANT YOK → {text}")
+                    print(f"❌ ZARA size out of stock → {text}")
 
-    print("İstenen ZARA varyantları stokta değil")
+    print("Requested ZARA variants are not in stock")
     return False
 
 from selenium import webdriver
@@ -83,18 +79,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 def create_driver():
     options = Options()
 
-    # 🔥 KRİTİK: yeni headless (eskisi değil)
     options.add_argument("--headless=new")
 
-    # 🛡️ Anti-bot kaçınma
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    # 🖥️ Gerçek ekran gibi davran
     options.add_argument("--window-size=1920,1080")
 
-    # 🧠 User-Agent spoof
     options.add_argument(
         "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -104,7 +96,6 @@ def create_driver():
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
 
-    # navigator.webdriver = false
     driver.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument",
         {

@@ -12,7 +12,7 @@ def send_mail(product_url):
     receiver = os.getenv("MAIL_TO")
 
     if not all([sender, password, receiver]):
-        raise RuntimeError("MAIL ayarları eksik! (.env kontrol et)")
+        raise RuntimeError("Missing MAIL configuration! (Check your .env file)")
 
     body = f"""
  ÜRÜN STOKTA 🚨
