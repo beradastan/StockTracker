@@ -32,6 +32,7 @@ jobs:
           MAIL_PASS: ${{ secrets.MAIL_PASS }}
           MAIL_TO:   ${{ secrets.MAIL_TO }}
           PRODUCTS_JSON: ${{ secrets.PRODUCTS_JSON }}
+          STOCK_STATE: ${{ secrets.STOCK_STATE }}
           DISPLAY: :99
         run: |
           python main.py
@@ -41,4 +42,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           echo "$UPDATED_STATE" | gh secret set STOCK_STATE --repo ${{ github.repository }}
+      
         

@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 from zara_checker import create_driver, check_stock_zara
@@ -86,5 +87,6 @@ if __name__ == "__main__":
             driver.quit()
             time.sleep(5)
 
+    os.environ["UPDATED_STATE"] = json.dumps(state)
     print("UPDATED_STATE=" + json.dumps(state))
     print("\n✅ Stock check completed, workflow finished successfully.")
