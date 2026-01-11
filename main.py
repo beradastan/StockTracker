@@ -3,7 +3,6 @@ import time
 from zara_checker import create_driver, check_stock_zara
 from stradivarius_checker import check_stock_stradivarius
 from bershka_checker import check_stock_bershka
-from pullandbear_checker import check_stock_pullandbear
 from notifier import send_mail
 from config import ZARA_PRODUCTS, STRADIVARIUS_PRODUCTS , BERSHKA_PRODUCTS , PULLANDBEAR_PRODUCTS
 
