@@ -2,7 +2,7 @@ name: Stock Tracker
 
 on:
   schedule:
-    - cron: "30 * * * *"   # Saatte 1 (UTC)
+    - cron: "*/10 * * * *"   # Saatte 1 (UTC)
   workflow_dispatch:      # Manuel çalıştırma
 
 jobs:
