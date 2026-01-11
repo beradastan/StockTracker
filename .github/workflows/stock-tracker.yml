@@ -2,8 +2,8 @@ name: Stock Tracker
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # Saatte 1 (UTC)
-  workflow_dispatch:      # Manuel çalıştırma
+    - cron: "30 * * * *"
+  workflow_dispatch:
 
 jobs:
   run-tracker:
@@ -39,8 +39,9 @@ jobs:
 
       - name: Update stock state secret
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "$UPDATED_STATE" | gh secret set STOCK_STATE --repo ${{ github.repository }}
+      
       
         
