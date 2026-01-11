@@ -1,0 +1,35 @@
+name: Stock Tracker
+
+on:
+  schedule:
+    - cron: "30 * * * *"   # Saatte 1 (UTC)
+  workflow_dispatch:      # Manuel çalıştırma
+
+jobs:
+  run-tracker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repo'yu çek
+        uses: actions/checkout@v4
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 📦 Bağımlılıkları yükle
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🌍 Chrome kur
+        uses: browser-actions/setup-chrome@v1
+
+      - name: 🚀 Stock Tracker çalıştır
+        env:
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
+          MAIL_TO:   ${{ secrets.MAIL_TO }}
+        run: |
+          python main.py
