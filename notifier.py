@@ -1,32 +1,18 @@
 import os
-from dotenv import load_dotenv
 import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
 
-load_dotenv()
-
-def send_mail(product_url):
+def _smtp_send(subject: str, body: str):
     sender = os.getenv("MAIL_USER")
     password = os.getenv("MAIL_PASS")
     receiver = os.getenv("MAIL_TO")
 
     if not all([sender, password, receiver]):
-        raise RuntimeError("Missing MAIL configuration! (Check your .env file)")
+        raise RuntimeError("Missing MAIL configuration! (Check GitHub Secrets / env vars)")
 
-    body = f"""
- ÜRÜN STOKTA 🚨
-
-Aşağıdaki ürün stokta görünüyor:
-
-{product_url}
-
-Tarih:
-{datetime.now()}
-"""
-
-    msg = MIMEText(body)
-    msg["Subject"] = "Ürün Stokta!"
+    msg = MIMEText(body, _charset="utf-8")
+    msg["Subject"] = subject
     msg["From"] = sender
     msg["To"] = receiver
 
@@ -34,13 +20,27 @@ Tarih:
         server.login(sender, password)
         server.send_message(msg)
 
+def send_stock_mail(product_url: str, extra: str = ""):
+    body = (
+        "ÜRÜN STOKTA 🚨\n\n"
+        "Aşağıdaki ürün stokta görünüyor:\n\n"
+        f"{product_url}\n"
+    )
 
-def send_startup_mail(products):
+    if extra.strip():
+        body += f"\nDetay:\n{extra}\n"
+
+    body += f"\nTarih:\n{datetime.now()}\n"
+    _smtp_send("Ürün Stokta!", body)
+
+def send_startup_mail(products: dict):
     lines = ["🟢 Stock Tracker BAŞLADI", "", "Takip edilen ürünler:"]
     for brand, items in products.items():
         lines.append(f"\n🔹 {brand.upper()}")
         for p in items:
-            lines.append(f"- {p['url']}")
-    body = "\n".join(lines)
-    send_mail(body)
+            sizes = p.get("sizes", [])
+            size_txt = f" (Bedenler: {', '.join(sizes)})" if sizes else " (Beden: tüm/tek varyant)"
+            lines.append(f"- {p.get('url')}{size_txt}")
 
+    body = "\n".join(lines) + f"\n\nTarih:\n{datetime.now()}\n"
+    _smtp_send("Stock Tracker Başladı", body)
