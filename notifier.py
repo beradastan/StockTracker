@@ -31,7 +31,7 @@ def send_stock_mail(product_url: str, extra: str = ""):
         body += f"\nDetay:\n{extra}\n"
 
     body += f"\nTarih:\n{datetime.now()}\n"
-    _smtp_send("Ürün Stokta!", body)
+    _smtp_send("Ürün Stokta Aşkım!", body)
 
 def send_startup_mail(products: dict):
     lines = ["🟢 Stock Tracker BAŞLADI", "", "Takip edilen ürünler:"]
