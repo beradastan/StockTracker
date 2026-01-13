@@ -14,7 +14,7 @@ if __name__ == "__main__":
     print("Stock check started (GitHub Actions run)")
 
     products = load_products()
-    send_startup_mail(products)
+    #send_startup_mail(products)
     ZARA_PRODUCTS = products.get("zara", [])
     STRADIVARIUS_PRODUCTS = products.get("stradivarius", [])
     BERSHKA_PRODUCTS = products.get("bershka", [])
