@@ -37,11 +37,7 @@ jobs:
         run: |
           python main.py
 
-      - name: Update stock state secret
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "$UPDATED_STATE" | gh secret set STOCK_STATE --repo ${{ github.repository }}
+
       
       
         
