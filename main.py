@@ -5,7 +5,7 @@ import time
 from zara_checker import create_driver, check_stock_zara
 from stradivarius_checker import check_stock_stradivarius
 from bershka_checker import check_stock_bershka
-from notifier import send_mail, send_startup_mail, send_stock_mail
+from notifier import  send_startup_mail, send_stock_mail
 from products_loader import load_products
 
 
