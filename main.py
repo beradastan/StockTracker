@@ -5,7 +5,7 @@ import time
 from zara_checker import create_driver, check_stock_zara
 from stradivarius_checker import check_stock_stradivarius
 from bershka_checker import check_stock_bershka
-from notifier import send_mail
+from notifier import send_mail, send_startup_mail
 from products_loader import load_products
 
 
@@ -14,9 +14,12 @@ if __name__ == "__main__":
     print("Stock check started (GitHub Actions run)")
 
     products = load_products()
+    send_startup_mail(products)
     ZARA_PRODUCTS = products.get("zara", [])
     STRADIVARIUS_PRODUCTS = products.get("stradivarius", [])
     BERSHKA_PRODUCTS = products.get("bershka", [])
+
+
 
 
     # 🔹 ZARA

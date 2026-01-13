@@ -33,3 +33,14 @@ Tarih:
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(sender, password)
         server.send_message(msg)
+
+
+def send_startup_mail(products):
+    lines = ["🟢 Stock Tracker BAŞLADI", "", "Takip edilen ürünler:"]
+    for brand, items in products.items():
+        lines.append(f"\n🔹 {brand.upper()}")
+        for p in items:
+            lines.append(f"- {p['url']}")
+    body = "\n".join(lines)
+    send_mail(body)
+
