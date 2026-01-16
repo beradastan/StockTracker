@@ -22,7 +22,7 @@ def _smtp_send(subject: str, body: str):
 
 def send_stock_mail(product_url: str, extra: str = ""):
     body = (
-        "ÜRÜN STOKTA AŞKIMMM 🚨\n\n"
+        "ÜRÜN STOKTA🚨\n\n"
         "Aşağıdaki ürün stokta görünüyor:\n\n"
         f"{product_url}\n"
     )
