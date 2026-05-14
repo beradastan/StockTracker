@@ -13,6 +13,10 @@ ZARA_PRODUCTS = [
         "url": "https://www.zara.com/tr/tr/regular-fit-burusmaz-yun-karisimli-pantolon-p04410235.html?v1=505407099",
         "sizes": ["XL"]
     },
+    {
+        "url": "https://www.zara.com/tr/tr/firfirli-bluz-p03666052.html?v1=511134221",
+        "sizes": ["S", "M"]
+    },
 ]
 
 # -----------------
