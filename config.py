@@ -9,6 +9,10 @@ ZARA_PRODUCTS = [
         "url": "https://www.zara.com/tr/tr/bogoss-vibrant-leather-edp-100ml--3-4-fl-oz--p20210723.html",
         "sizes": []  # bedensiz → boş liste
     },
+    {
+        "url": "https://www.zara.com/tr/tr/regular-fit-burusmaz-yun-karisimli-pantolon-p04410235.html?v1=505407099",
+        "sizes": ["XL"]
+    },
 ]
 
 # -----------------
