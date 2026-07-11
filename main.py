@@ -51,11 +51,14 @@ if __name__ == "__main__":
 
         try:
             if check_stock_stradivarius(driver, url, sizes):
-                for size in sizes:
-                    print(f"🚨 STRADIVARIUS in stock (Size: {', '.join(sizes)})")
-                    send_stock_mail(url)
+                size_text = ", ".join(sizes) if sizes else "ANY SIZE"
+                print(f"🚨 STRADIVARIUS in stock (Size: {size_text})")
+                send_stock_mail(url)
             else:
-                print(f"❌ STRADIVARIUS requested sizes are not in stock: {sizes}")
+                if sizes:
+                    print(f"❌ STRADIVARIUS requested sizes are not in stock: {sizes}")
+                else:
+                    print("❌ STRADIVARIUS is out of stock for all sizes")
         finally:
             driver.quit()
             time.sleep(5)

@@ -30,6 +30,8 @@ def check_stock_stradivarius(driver, url, target_sizes):
         return False
 
     size_buttons = driver.find_elements(By.CSS_SELECTOR, "button.size-item")
+    target_sizes_upper = [s.upper() for s in target_sizes]
+    track_all_sizes = len(target_sizes_upper) == 0
 
     for btn in size_buttons:
         class_attr = btn.get_attribute("class") or ""
@@ -40,7 +42,7 @@ def check_stock_stradivarius(driver, url, target_sizes):
         except Exception:
             continue
 
-        if size_text not in [s.upper() for s in target_sizes]:
+        if not track_all_sizes and size_text not in target_sizes_upper:
             continue
 
         print(f"🔍 {size_text} found")
@@ -49,9 +51,11 @@ def check_stock_stradivarius(driver, url, target_sizes):
             print(f"❌ Size {size_text} out of stock (size-no-stock)")
             continue
 
-        # ✅ STOKTA
         print(f"✅ Size {size_text} si in stock")
         return True
 
-    print("None of the requested sizes are in stock")
+    if track_all_sizes:
+        print("No size is currently in stock")
+    else:
+        print("None of the requested sizes are in stock")
     return False
