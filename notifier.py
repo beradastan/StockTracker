@@ -6,19 +6,23 @@ from datetime import datetime
 def _smtp_send(subject: str, body: str):
     sender = os.getenv("MAIL_USER")
     password = os.getenv("MAIL_PASS")
-    receiver = os.getenv("MAIL_TO")
+    receivers = [
+        mail.strip()
+        for mail in os.getenv("MAIL_TO", "").split(",")
+        if mail.strip()
+    ]
 
-    if not all([sender, password, receiver]):
+    if not all([sender, password, receivers]):
         raise RuntimeError("Missing MAIL configuration! (Check GitHub Secrets / env vars)")
 
     msg = MIMEText(body, _charset="utf-8")
     msg["Subject"] = subject
     msg["From"] = sender
-    msg["To"] = receiver
+    msg["To"] = ", ".join(receivers)
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(sender, password)
-        server.send_message(msg)
+        server.sendmail(sender, receivers, msg.as_string())
 
 def send_stock_mail(product_url: str, extra: str = ""):
     body = (
